@@ -1,0 +1,20 @@
+// Custom variables
+@blue: blue;
+
+// Autoprefixer
+.vendor (@property, @value) {
+    -webkit-@{property}: @value;
+    -moz-@{property}: @value;
+    -ms-@{property}: @value;
+    -o-@{property}: @value;
+    @{property}: @value;
+}
+
+// Apply all above
+
+body {
+    .vendor(transition, all 200ms ease-in);
+    &:hover {
+        color: @blue;
+    }
+}
