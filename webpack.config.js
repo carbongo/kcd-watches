@@ -1,10 +1,8 @@
-const package = require('./package.json'),
-    path = require('path'),
+const path = require('path'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 
-const TITLE = package.description,
-    MASTER_JS_FILE = './src/scripts/master.js',
+const MASTER_JS_FILE = './src/scripts/master.js',
     MASTER_HTML_FILE = './src/index.html',
     OUTPUT_FOLDER = 'build',
     OUTPUT_MASTER_JS = '[name].bundle.js';
@@ -62,7 +60,6 @@ module.exports = env => {
 
 function getHtmlWebpackPluginOpt(env) {
     const opt = {
-        title: TITLE,
         template: MASTER_HTML_FILE,
         minify: {
             collapseInlineTagWhitespace: true,
