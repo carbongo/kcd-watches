@@ -2,7 +2,7 @@
     "name": "webpack-html-es6-less-boilerplate",
     "version": "1.0.0",
     "description": "Boilerplate (blank) project for HTML, JavaScript (ES6), CSS (Less)",
-    "main": "index.js",
+    "private": true,
     "scripts": {
         "start": "webpack-dev-server --env.mode=development",
         "build": "webpack --env.mode=production --progress --profile --colors"
