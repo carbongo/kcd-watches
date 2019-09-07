@@ -1,5 +1,12 @@
 # KCD Watches
-Kingdom Come: Deliverance inspired watches. "Henry comes to see us!". Not affiliated with Warhorse Studios.
+"Henry comes to see us!"
+
+Kingdom Come: Deliverance inspired watches. 
+
+Not affiliated with Warhorse Studios.
+
+![KCD Watches screenshot](https://i.imgur.com/jBJoCGp.png)
+
 Output is standalone inline ***build/index.html***.
 
 ## Usage
