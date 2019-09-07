@@ -1,5 +1,6 @@
-# webpack-html-es6-less-boilerplate
-Boilerplate (blank) project for HTML, JavaScript (ES6), CSS (Less). Output is standalone inline ***build/index.html***.
+# KCD Watches
+Kingdom Come: Deliverance inspired watches. "Henry comes to see us!". Not affiliated with Warhorse Studios.
+Output is standalone inline ***build/index.html***.
 
 ## Usage
 ### 1. Install dependencies
@@ -18,7 +19,3 @@ Boilerplate (blank) project for HTML, JavaScript (ES6), CSS (Less). Output is st
 * * ***index.html*** -- *HTML* master-file
 * ***package.json*** -- project info and dependencies list
 * ***webpack.config.js*** -- webpack configuration
-
-## To-Do
-* Add ***ESLint***
-* Implement automatic ***build/main.bundle.js*** disposal
