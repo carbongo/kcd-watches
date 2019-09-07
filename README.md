@@ -7,7 +7,7 @@ Not affiliated with Warhorse Studios.
 
 ![KCD Watches screenshot](https://i.imgur.com/RIS5p7X.png)
 
-Output is standalone inline ***build/index.html***.
+Output is standalone inline ***public/index.html***.
 
 ## Usage
 ### 1. Install dependencies
