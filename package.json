@@ -14,12 +14,13 @@
     "author": "George An. (https://github.com/carbongo)",
     "license": "ISC",
     "keywords": [
-        "webpack",
-        "boilerplate",
+        "kingdom come",
+        "henry",
+        "watches",
+        "replica",
         "html",
-        "es6",
-        "babel",
-        "less"
+        "javascript",
+        "css"
     ],
     "bugs": {
         "url": "https://github.com/carbongo/kcd-watches/issues"
