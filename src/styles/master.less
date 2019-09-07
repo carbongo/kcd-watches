@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'Gaegu';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Gaegu Bold'), local('Gaegu-Bold'), url("https://fonts.gstatic.com/s/gaegu/v8/TuGSUVB6Up9NU573jvw-4sFtBxciPsu5uTs0PnI6bVN6hXFu_jPd.0.woff2") format('woff2');
+    unicode-range: U+f9ca-fa0b, U+ff03-ff05, U+ff07, U+ff0a-ff0b, U+ff0d-ff19, U+ff1b, U+ff1d, U+ff20-ff5b, U+ff5d, U+ffe0-ffe3, U+ffe5-ffe6;
+}
+
 // Custom variables
 @blue: blue;
 
@@ -10,11 +18,70 @@
     @{property}: @value;
 }
 
-// Demonstration
+// Custom style
+
+* {
+    margin: 0;
+    padding: 0;
+}
 
 body {
-    .vendor(transition, all 200ms ease-in);
-    &:hover {
-        color: @blue;
+    font-family: 'Gaegu', cursive, "Helvetica Neue", sans-serif;
+    background: #000;
+    overflow: hidden;
+    margin: 0 auto;
+    opacity: 1;
+}
+figure {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: contain;
+}
+.face {
+    background-image: url('../images/face.png');
+    z-index: 1;
+    overflow: hidden;
+}
+.clock {
+    .vendor(transition, transform 1s ease 0.5s);
+    background-image: url('../images/clock.png');
+    z-index: 2;
+    transform-origin: center;
+    overflow: hidden;
+}
+.arrow {
+    background-image: url('../images/arrow.png');
+    z-index: 3;
+    overflow: hidden;
+}
+.text {
+    position: absolute;
+    height: 50%;
+    width: 50%;
+    display: table;
+    z-index: 4;
+    overflow: hidden;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.time {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    font-size: 4.6vw;
+    line-height: 5vw;
+    overflow: hidden;
+    @media (orientation:portrait) {
+        font-size: 4.6vh;
+        line-height: 5vh;
     }
 }
