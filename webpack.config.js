@@ -4,7 +4,7 @@ const path = require('path'),
 
 const MASTER_JS_FILE = './src/scripts/master.js',
     MASTER_HTML_FILE = './src/index.html',
-    OUTPUT_FOLDER = 'build',
+    OUTPUT_FOLDER = 'public',
     OUTPUT_MASTER_JS = '[name].bundle.js';
 
 module.exports = env => {

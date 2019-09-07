@@ -5,7 +5,7 @@
     "private": true,
     "scripts": {
         "start": "webpack-dev-server --env.mode=development",
-        "build": "webpack --env.mode=production --progress --profile --colors --output build"
+        "build": "webpack --env.mode=production --progress --profile --colors"
     },
     "repository": {
         "type": "git",
