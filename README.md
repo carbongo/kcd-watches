@@ -5,7 +5,7 @@ Kingdom Come: Deliverance inspired watches.
 
 Not affiliated with Warhorse Studios.
 
-![KCD Watches screenshot](https://i.imgur.com/jBJoCGp.png)
+![KCD Watches screenshot](https://i.imgur.com/RIS5p7X.png)
 
 Output is standalone inline ***build/index.html***.
 
