@@ -14,6 +14,8 @@ const textClassName =
 const dayTextClassName = `${textClassName} fill-black/80`;
 const nightTextClassName = `${textClassName} fill-white`;
 const sunEventTextClassName = `${textClassName} fill-amber-200`;
+const moonHourTextClassName = `${textClassName} fill-black`;
+const sunHourTextClassName = `${textClassName} fill-black`;
 
 interface HourLabelsOverlayProps {
   sunWindow: SunWindow;
@@ -61,6 +63,14 @@ function getHourTextClassName(
   sunEventHours: number[],
   hour: number,
 ) {
+  if (hour === 0) {
+    return moonHourTextClassName;
+  }
+
+  if (hour === 12) {
+    return sunHourTextClassName;
+  }
+
   if (sunEventHours.includes(hour)) {
     return sunEventTextClassName;
   }
