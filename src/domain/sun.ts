@@ -1,4 +1,4 @@
-import { normalizeMinutes } from "./time";
+import { MINUTES_PER_HOUR, normalizeMinutes } from "./time";
 import type { TimeZoneCity } from "./timeZones";
 
 export type SunWindow =
@@ -136,7 +136,10 @@ function getMinutesInTimeZone(date: Date, timeZone: string) {
     timeZone
   }).formatToParts(date);
 
-  return normalizeMinutes(Number(getPart(parts, "hour")) * 60 + Number(getPart(parts, "minute")));
+  return normalizeMinutes(
+    Number(getPart(parts, "hour")) * MINUTES_PER_HOUR +
+      Number(getPart(parts, "minute")),
+  );
 }
 
 function formatTimeInTimeZone(date: Date, timeZone: string) {

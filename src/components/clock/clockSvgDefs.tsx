@@ -1,3 +1,24 @@
+import type { SVGProps } from "react";
+
+import { CLOCK_VIEW_BOX } from "./clockGeometry";
+
+const clockOverlayClassName =
+  "pointer-events-none absolute inset-0 h-full w-full";
+
+export function ClockSvg({
+  className = "",
+  ...props
+}: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      className={`${clockOverlayClassName} ${className}`.trim()}
+      viewBox={CLOCK_VIEW_BOX}
+      aria-hidden="true"
+      {...props}
+    />
+  );
+}
+
 interface SvgDefProps {
   id: string;
 }

@@ -1,11 +1,10 @@
-import { CLOCK_CENTER, CLOCK_VIEW_BOX, SUN_ARC_RADIUS } from "./clockGeometry";
-
-const overlayClassName = "pointer-events-none absolute inset-0 h-full w-full";
-
-const RING_WIDTH = 132;
-const INNER_BORDER_RADIUS = SUN_ARC_RADIUS - RING_WIDTH / 2;
-const OUTER_BORDER_RADIUS = SUN_ARC_RADIUS + RING_WIDTH / 2;
-const RING_PATH = getRingPath();
+import {
+  CLOCK_CENTER,
+  PLASTER_RING_CLIP_PATH,
+  PLASTER_RING_INNER_RADIUS,
+  PLASTER_RING_OUTER_RADIUS,
+} from "./clockGeometry";
+import { ClockSvg } from "./clockSvgDefs";
 
 const crackPaths = [
   "M424 120c-10 19 3 31-7 48-7 12-24 12-26 29-2 13 9 19 4 31-5 13-21 15-28 28",
@@ -57,11 +56,7 @@ const hairlineCracks = [
 
 export function PlasterArcOverlay() {
   return (
-    <svg
-      className={overlayClassName}
-      viewBox={CLOCK_VIEW_BOX}
-      aria-hidden="true"
-    >
+    <ClockSvg>
       <defs>
         <radialGradient id="plaster-fill" cx="50%" cy="50%" r="55%">
           <stop offset="55%" stopColor="#f4f1df" />
@@ -76,12 +71,24 @@ export function PlasterArcOverlay() {
         </linearGradient>
 
         <clipPath id="plaster-ring-clip">
-          <path d={RING_PATH} fillRule="evenodd" clipRule="evenodd" />
+          <path
+            d={PLASTER_RING_CLIP_PATH}
+            fillRule="evenodd"
+            clipRule="evenodd"
+          />
         </clipPath>
       </defs>
 
-      <path d={RING_PATH} fill="url(#plaster-fill)" fillRule="evenodd" />
-      <path d={RING_PATH} fill="url(#plaster-shade)" fillRule="evenodd" />
+      <path
+        d={PLASTER_RING_CLIP_PATH}
+        fill="url(#plaster-fill)"
+        fillRule="evenodd"
+      />
+      <path
+        d={PLASTER_RING_CLIP_PATH}
+        fill="url(#plaster-shade)"
+        fillRule="evenodd"
+      />
 
       <g clipPath="url(#plaster-ring-clip)">
         <g
@@ -111,17 +118,13 @@ export function PlasterArcOverlay() {
           ))}
         </g>
       </g>
-    </svg>
+    </ClockSvg>
   );
 }
 
 export function PlasterArcBorders() {
   return (
-    <svg
-      className={overlayClassName}
-      viewBox={CLOCK_VIEW_BOX}
-      aria-hidden="true"
-    >
+    <ClockSvg>
       <defs>
         <linearGradient id="gold-border" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#fff0a7" />
@@ -135,7 +138,7 @@ export function PlasterArcBorders() {
         <circle
           cx={CLOCK_CENTER}
           cy={CLOCK_CENTER}
-          r={OUTER_BORDER_RADIUS}
+          r={PLASTER_RING_OUTER_RADIUS}
           stroke="#68480f"
           strokeWidth="7"
           opacity="0.65"
@@ -143,14 +146,14 @@ export function PlasterArcBorders() {
         <circle
           cx={CLOCK_CENTER}
           cy={CLOCK_CENTER}
-          r={OUTER_BORDER_RADIUS - 2}
+          r={PLASTER_RING_OUTER_RADIUS - 2}
           stroke="url(#gold-border)"
           strokeWidth="4"
         />
         <circle
           cx={CLOCK_CENTER}
           cy={CLOCK_CENTER}
-          r={INNER_BORDER_RADIUS}
+          r={PLASTER_RING_INNER_RADIUS}
           stroke="#68480f"
           strokeWidth="7"
           opacity="0.65"
@@ -158,281 +161,11 @@ export function PlasterArcBorders() {
         <circle
           cx={CLOCK_CENTER}
           cy={CLOCK_CENTER}
-          r={INNER_BORDER_RADIUS + 2}
+          r={PLASTER_RING_INNER_RADIUS + 2}
           stroke="url(#gold-border)"
           strokeWidth="4"
         />
       </g>
-    </svg>
+    </ClockSvg>
   );
-}
-
-function getRingPath() {
-  return [
-    `M ${CLOCK_CENTER} ${CLOCK_CENTER - OUTER_BORDER_RADIUS}`,
-    `A ${OUTER_BORDER_RADIUS} ${OUTER_BORDER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER + OUTER_BORDER_RADIUS}`,
-    `A ${OUTER_BORDER_RADIUS} ${OUTER_BORDER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER - OUTER_BORDER_RADIUS}`,
-    `M ${CLOCK_CENTER} ${CLOCK_CENTER - INNER_BORDER_RADIUS}`,
-    `A ${INNER_BORDER_RADIUS} ${INNER_BORDER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER + INNER_BORDER_RADIUS}`,
-    `A ${INNER_BORDER_RADIUS} ${INNER_BORDER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER - INNER_BORDER_RADIUS}`,
-  ].join(" ");
-}
-
-interface CrackAnchor {
-  angle: number;
-  branchCount: number;
-  drift: number;
-  length: number;
-  radiusOffset: number;
-  seed: number;
-  width: number;
-}
-
-interface CrackNetwork {
-  branches: string[];
-  main: string;
-  width: number;
-}
-
-function makePlasterCrackNetworks() {
-  return [
-    {
-      angle: 252,
-      branchCount: 5,
-      drift: -24,
-      length: 170,
-      radiusOffset: -12,
-      seed: 11,
-      width: 1.35,
-    },
-    {
-      angle: 287,
-      branchCount: 4,
-      drift: 28,
-      length: 132,
-      radiusOffset: 22,
-      seed: 31,
-      width: 1.1,
-    },
-    {
-      angle: 318,
-      branchCount: 6,
-      drift: -18,
-      length: 190,
-      radiusOffset: 4,
-      seed: 47,
-      width: 1.45,
-    },
-    {
-      angle: 354,
-      branchCount: 3,
-      drift: 16,
-      length: 106,
-      radiusOffset: -30,
-      seed: 71,
-      width: 0.95,
-    },
-    {
-      angle: 24,
-      branchCount: 5,
-      drift: -30,
-      length: 156,
-      radiusOffset: 18,
-      seed: 89,
-      width: 1.22,
-    },
-    {
-      angle: 58,
-      branchCount: 4,
-      drift: 24,
-      length: 122,
-      radiusOffset: -6,
-      seed: 113,
-      width: 1.02,
-    },
-    {
-      angle: 96,
-      branchCount: 6,
-      drift: 12,
-      length: 184,
-      radiusOffset: 14,
-      seed: 149,
-      width: 1.38,
-    },
-    {
-      angle: 139,
-      branchCount: 3,
-      drift: -22,
-      length: 118,
-      radiusOffset: -24,
-      seed: 173,
-      width: 1,
-    },
-    {
-      angle: 177,
-      branchCount: 5,
-      drift: 26,
-      length: 164,
-      radiusOffset: 26,
-      seed: 211,
-      width: 1.24,
-    },
-    {
-      angle: 213,
-      branchCount: 4,
-      drift: -12,
-      length: 128,
-      radiusOffset: 2,
-      seed: 263,
-      width: 0.98,
-    },
-  ].map((anchor) => makePlasterCrackNetwork(anchor));
-}
-
-function makePlasterCrackNetwork(anchor: CrackAnchor): CrackNetwork {
-  const random = createSeededRandom(anchor.seed);
-  const centerAngle = degreesToRadians(anchor.angle);
-  const centerRadius = clamp(
-    SUN_ARC_RADIUS + anchor.radiusOffset,
-    INNER_BORDER_RADIUS + 18,
-    OUTER_BORDER_RADIUS - 18,
-  );
-  const segmentCount = randomInt(6, 10, random);
-  const localPoints = Array.from({ length: segmentCount + 1 }, (_, index) => {
-    const progress = index / segmentCount;
-    const tangent =
-      lerp(-anchor.length / 2, anchor.length / 2, progress) +
-      (random() - 0.5) * 20;
-    const radial =
-      lerp(0, anchor.drift, progress) +
-      Math.sin(progress * Math.PI * 2 + random() * 0.7) * 10 +
-      (random() - 0.5) * 16;
-
-    return { radial, tangent };
-  });
-
-  const branches = Array.from({ length: anchor.branchCount }, () => {
-    const startIndex = randomInt(1, localPoints.length - 2, random);
-    const startPoint = localPoints[startIndex];
-
-    if (startPoint === undefined) {
-      return "";
-    }
-
-    return makeNetworkBranch(startPoint, centerAngle, centerRadius, random);
-  });
-
-  return {
-    branches,
-    main: pointsToPath(
-      localPoints.map((point) =>
-        localToClockPoint(point, centerAngle, centerRadius),
-      ),
-    ),
-    width: anchor.width,
-  };
-}
-
-function makeNetworkBranch(
-  startPoint: LocalPoint,
-  centerAngle: number,
-  centerRadius: number,
-  random: () => number,
-) {
-  const points = [startPoint];
-  const segmentCount = randomInt(2, 4, random);
-  const tangentDirection = random() > 0.5 ? 1 : -1;
-  const radialDirection = random() > 0.5 ? 1 : -1;
-  let currentPoint = startPoint;
-
-  for (let index = 0; index < segmentCount; index += 1) {
-    currentPoint = {
-      radial: currentPoint.radial + radialDirection * (10 + random() * 18),
-      tangent:
-        currentPoint.tangent +
-        tangentDirection * (10 + random() * 24) +
-        (random() - 0.5) * 14,
-    };
-    points.push(currentPoint);
-  }
-
-  return pointsToPath(
-    points.map((point) => localToClockPoint(point, centerAngle, centerRadius)),
-  );
-}
-
-interface LocalPoint {
-  radial: number;
-  tangent: number;
-}
-
-interface ClockPoint {
-  x: number;
-  y: number;
-}
-
-function localToClockPoint(
-  { radial, tangent }: LocalPoint,
-  centerAngle: number,
-  centerRadius: number,
-) {
-  const radius = clamp(
-    centerRadius + radial,
-    INNER_BORDER_RADIUS + 10,
-    OUTER_BORDER_RADIUS - 10,
-  );
-
-  return polarPoint(centerAngle + tangent / centerRadius, radius);
-}
-
-function pointsToPath(points: ClockPoint[]) {
-  const [firstPoint, ...remainingPoints] = points;
-
-  if (firstPoint === undefined) {
-    return "";
-  }
-
-  return [
-    `M${formatPoint(firstPoint.x)} ${formatPoint(firstPoint.y)}`,
-    ...remainingPoints.map(
-      (point) => `L${formatPoint(point.x)} ${formatPoint(point.y)}`,
-    ),
-  ].join(" ");
-}
-
-function polarPoint(angle: number, radius: number) {
-  return {
-    x: CLOCK_CENTER + Math.cos(angle) * radius,
-    y: CLOCK_CENTER + Math.sin(angle) * radius,
-  };
-}
-
-function degreesToRadians(degrees: number) {
-  return (degrees / 180) * Math.PI;
-}
-
-function createSeededRandom(seed: number) {
-  let value = seed;
-
-  return () => {
-    value = (value * 1664525 + 1013904223) >>> 0;
-
-    return value / 4294967296;
-  };
-}
-
-function randomInt(min: number, max: number, random: () => number) {
-  return Math.floor(lerp(min, max + 1, random()));
-}
-
-function lerp(start: number, end: number, amount: number) {
-  return start + (end - start) * amount;
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function formatPoint(value: number) {
-  return value.toFixed(1);
 }

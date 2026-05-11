@@ -1,4 +1,8 @@
-import { normalizeMinutes } from "../../domain/time";
+import {
+  MINUTES_PER_DAY,
+  MINUTES_PER_HOUR,
+  normalizeMinutes,
+} from "../../domain/time";
 
 export const CLOCK_CENTER = 600;
 export const SUN_ARC_RADIUS = 446;
@@ -10,7 +14,9 @@ export const PLASTER_RING_OUTER_RADIUS =
   SUN_ARC_RADIUS + PLASTER_RING_WIDTH / 2;
 
 export function minutesToDegrees(minutes: number) {
-  return (normalizeMinutes(minutes + 720) / 1440) * 360;
+  return (
+    (normalizeMinutes(minutes + MINUTES_PER_DAY / 2) / MINUTES_PER_DAY) * 360
+  );
 }
 
 export function polarToCartesian(angleDegrees: number, radius = SUN_ARC_RADIUS) {
@@ -53,3 +59,19 @@ export const PLASTER_RING_CLIP_PATH = getRingClipPath(
   PLASTER_RING_INNER_RADIUS,
   PLASTER_RING_OUTER_RADIUS,
 );
+
+export function getRoundedSunEventHours(
+  sunriseMinutes: number,
+  sunsetMinutes: number,
+) {
+  return Array.from(
+    new Set([getRoundedHour(sunriseMinutes), getRoundedHour(sunsetMinutes)]),
+  );
+}
+
+function getRoundedHour(minutes: number) {
+  return (
+    normalizeMinutes(Math.round(minutes / MINUTES_PER_HOUR) * MINUTES_PER_HOUR) /
+    MINUTES_PER_HOUR
+  );
+}

@@ -1,26 +1,24 @@
 import { useId } from "react";
 
 import type { SunWindow } from "../../domain/sun";
-import { normalizeMinutes } from "../../domain/time";
+import { MINUTES_PER_HOUR, normalizeMinutes } from "../../domain/time";
 import {
-  CLOCK_VIEW_BOX,
   PLASTER_RING_CLIP_PATH,
   getClockArcPath,
+  getRoundedSunEventHours,
   minutesToDegrees,
   polarToCartesian,
 } from "./clockGeometry";
-import { RingClipPath, SoftBlurFilter } from "./clockSvgDefs";
+import { ClockSvg, RingClipPath, SoftBlurFilter } from "./clockSvgDefs";
 
 interface SunArcOverlayProps {
   sunWindow: SunWindow;
 }
 
-const arcClassName = "pointer-events-none absolute inset-0 h-full w-full";
 const glowClassName =
   "fill-none stroke-amber-300/100 stroke-[190] [stroke-linecap:round]";
 const coreClassName =
   "fill-none stroke-amber-100/100 stroke-[42] [stroke-linecap:round]";
-const markerClassName = "pointer-events-none absolute inset-0 h-full w-full";
 const markerCircleClassName = "fill-none stroke-amber-200/95 stroke-[2]";
 
 const MIN_CORE_ARC_MINUTES = 60;
@@ -51,7 +49,7 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
 
   return (
     <>
-      <svg className={arcClassName} viewBox={CLOCK_VIEW_BOX} aria-hidden="true">
+      <ClockSvg>
         <defs>
           <RingClipPath id={plasterClipPathId} path={PLASTER_RING_CLIP_PATH} />
           <SoftBlurFilter id={softArcFilterId} stdDeviation={24} />
@@ -62,7 +60,7 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
             <path className={coreClassName} d={corePath} />
           </g>
         </g>
-      </svg>
+      </ClockSvg>
       {markerHours.length > 0 ? (
         <SunEventHourMarkers
           hours={markerHours}
@@ -83,17 +81,15 @@ function SunEventHourMarkers({
   plasterClipPathId,
 }: SunEventHourMarkersProps) {
   return (
-    <svg
-      className={markerClassName}
-      viewBox={CLOCK_VIEW_BOX}
-      aria-hidden="true"
-    >
+    <ClockSvg>
       <defs>
         <RingClipPath id={plasterClipPathId} path={PLASTER_RING_CLIP_PATH} />
       </defs>
       <g clipPath={`url(#${plasterClipPathId})`}>
         {hours.map((hour) => {
-          const position = polarToCartesian(minutesToDegrees(hour * 60));
+          const position = polarToCartesian(
+            minutesToDegrees(hour * MINUTES_PER_HOUR),
+          );
 
           return (
             <circle
@@ -106,21 +102,8 @@ function SunEventHourMarkers({
           );
         })}
       </g>
-    </svg>
+    </ClockSvg>
   );
-}
-
-export function getRoundedSunEventHours(
-  sunriseMinutes: number,
-  sunsetMinutes: number,
-) {
-  return Array.from(
-    new Set([getRoundedHour(sunriseMinutes), getRoundedHour(sunsetMinutes)]),
-  );
-}
-
-function getRoundedHour(minutes: number) {
-  return normalizeMinutes(Math.round(minutes / 60) * 60) / 60;
 }
 
 function getZenithArcPath(startMinutes: number, endMinutes: number) {

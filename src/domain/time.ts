@@ -1,3 +1,7 @@
+export const MINUTES_PER_HOUR = 60;
+export const HOURS_PER_DAY = 24;
+export const MINUTES_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR;
+
 export interface ClockTime {
   hours: number;
   minutes: number;
@@ -13,11 +17,7 @@ export function getClockTime(date: Date): ClockTime {
 }
 
 export function getClockRotationDegrees({ hours, minutes }: ClockTime) {
-  return 180 - (hours * 60 + minutes) * 0.25;
-}
-
-function formatTimePart(value: number) {
-  return value < 10 ? `0${value}` : `${value}`;
+  return 180 - (hours * MINUTES_PER_HOUR + minutes) * 0.25;
 }
 
 export function getTimeLabel({ hours, minutes, seconds }: ClockTime) {
@@ -28,6 +28,10 @@ export function getTimeLabel({ hours, minutes, seconds }: ClockTime) {
   ];
 }
 
+function formatTimePart(value: number) {
+  return value.toString().padStart(2, "0");
+}
+
 export function normalizeMinutes(minutes: number) {
-  return ((minutes % 1440) + 1440) % 1440;
+  return ((minutes % MINUTES_PER_DAY) + MINUTES_PER_DAY) % MINUTES_PER_DAY;
 }

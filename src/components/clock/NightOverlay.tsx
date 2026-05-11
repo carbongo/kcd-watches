@@ -4,7 +4,6 @@ import type { SunWindow } from "../../domain/sun";
 import { normalizeMinutes } from "../../domain/time";
 import {
   CLOCK_CENTER,
-  CLOCK_VIEW_BOX,
   PLASTER_RING_CLIP_PATH,
   PLASTER_RING_INNER_RADIUS,
   PLASTER_RING_OUTER_RADIUS,
@@ -14,13 +13,17 @@ import {
   minutesToDegrees,
   polarToCartesian,
 } from "./clockGeometry";
-import { GlowFilter, RingClipPath, SoftBlurFilter } from "./clockSvgDefs";
+import {
+  ClockSvg,
+  GlowFilter,
+  RingClipPath,
+  SoftBlurFilter,
+} from "./clockSvgDefs";
 
 interface NightOverlayProps {
   sunWindow: SunWindow;
 }
 
-const overlayClassName = "pointer-events-none absolute inset-0 h-full w-full";
 const nightOuterGlowClassName =
   "fill-none stroke-sky-600/70 stroke-[190] [stroke-linecap:round]";
 const nightMidGlowClassName =
@@ -166,11 +169,7 @@ function NightArc({
   );
 
   return (
-    <svg
-      className={overlayClassName}
-      viewBox={CLOCK_VIEW_BOX}
-      aria-hidden="true"
-    >
+    <ClockSvg>
       <defs>
         <RingClipPath id={ringClipPathId} path={PLASTER_RING_CLIP_PATH} />
         <SoftBlurFilter id={softGlowFilterId} stdDeviation={28} />
@@ -181,7 +180,7 @@ function NightArc({
           {coreShape}
         </g>
       </g>
-    </svg>
+    </ClockSvg>
   );
 }
 
@@ -210,11 +209,7 @@ function NightStarsOverlay({
   stars,
 }: NightStarsOverlayProps) {
   return (
-    <svg
-      className={overlayClassName}
-      viewBox={CLOCK_VIEW_BOX}
-      aria-hidden="true"
-    >
+    <ClockSvg>
       <defs>
         <RingClipPath id={ringClipPathId} path={PLASTER_RING_CLIP_PATH} />
         <clipPath id={clipPathId}>
@@ -244,7 +239,7 @@ function NightStarsOverlay({
           ))}
         </g>
       </g>
-    </svg>
+    </ClockSvg>
   );
 }
 
