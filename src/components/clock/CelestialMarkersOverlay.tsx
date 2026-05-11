@@ -16,7 +16,7 @@ const RING_CLIP_PATH = getRingClipPath();
 
 const moonPosition = polarToCartesian(minutesToDegrees(MOON_HOUR * 60));
 const sunPosition = polarToCartesian(minutesToDegrees(SUN_HOUR * 60));
-const sunRays = getPaintedSunRays(sunPosition.x, sunPosition.y, 24, 160, 24);
+const sunRays = getPaintedSunRays(sunPosition.x, sunPosition.y, 1, 160, 24);
 const sunStretchTransform = `translate(${sunPosition.x} ${sunPosition.y}) scale(1.32 0.88) translate(${-sunPosition.x} ${-sunPosition.y})`;
 
 export function CelestialMarkersOverlay() {
@@ -28,14 +28,13 @@ export function CelestialMarkersOverlay() {
     >
       <defs>
         <radialGradient id="celestial-sun-fill" cx="46%" cy="38%" r="62%">
-          <stop offset="0" stopColor="#fff9ba" />
-          <stop offset="0.38" stopColor="#f6df69" />
-          <stop offset="1" stopColor="#d99a2f" />
+          <stop offset="0" stopColor="#ffffbb" />
+          <stop offset="1" stopColor="#ffffbb" />
         </radialGradient>
         <radialGradient id="celestial-moon-fill" cx="42%" cy="34%" r="68%">
-          <stop offset="0" stopColor="#fffbe7" />
-          <stop offset="0.62" stopColor="#e7e2cf" />
-          <stop offset="1" stopColor="#a9a390" />
+          <stop offset="0" stopColor="#aaaaaa" />
+          <stop offset="0.75" stopColor="#cccccc" />
+          <stop offset="1" stopColor="#ffffff" />
         </radialGradient>
         <clipPath id="celestial-arc-clip">
           <path d={RING_CLIP_PATH} fillRule="evenodd" clipRule="evenodd" />
@@ -62,15 +61,15 @@ export function CelestialMarkersOverlay() {
               cx={sunPosition.x}
               cy={sunPosition.y}
               r="92"
-              fill="#eeb843"
-              opacity="0.24"
+              fill="#eebb00"
+              opacity="0.25"
             />
             {sunRays.map((ray) => (
               <path
                 key={ray}
                 d={ray}
                 fill="url(#celestial-sun-fill)"
-                opacity="0.86"
+                opacity="0.65"
               />
             ))}
           </g>
@@ -79,13 +78,6 @@ export function CelestialMarkersOverlay() {
             cy={sunPosition.y}
             r="37"
             fill="url(#celestial-sun-fill)"
-          />
-          <circle
-            cx={sunPosition.x - 8}
-            cy={sunPosition.y - 10}
-            r="12"
-            fill="#fff3a6"
-            opacity="0.62"
           />
         </g>
 
@@ -143,7 +135,7 @@ function getPaintedSunRays(
 ) {
   return Array.from({ length: rayCount }, (_, index) => {
     const angle = (index / rayCount) * Math.PI * 2 - Math.PI / 2;
-    const width = index % 2 === 0 ? 0.1 : 0.1;
+    const width = index % 2 === 0 ? 0.01 : 0.005;
     const wave = index % 2 === 0 ? 24 : 24;
     const length = endRadius - (index % 2) * 24;
     const innerLeft = pointOnCircle(

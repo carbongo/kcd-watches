@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 import type { SunWindow } from "../../domain/sun";
 import { normalizeMinutes } from "../../domain/time";
 import {
@@ -12,12 +14,11 @@ interface SunArcOverlayProps {
   sunWindow: SunWindow;
 }
 
-const arcClassName =
-  "pointer-events-none absolute inset-0 h-full w-full blur-xl";
+const arcClassName = "pointer-events-none absolute inset-0 h-full w-full";
 const nightClassName =
-  "fill-none stroke-blue-950/100 stroke-[150] [stroke-linecap:round]";
+  "fill-none stroke-blue-950/100 stroke-[190] [stroke-linecap:round]";
 const glowClassName =
-  "fill-none stroke-amber-300/50 stroke-[150] [stroke-linecap:round]";
+  "fill-none stroke-amber-300/100 stroke-[190] [stroke-linecap:round]";
 const coreClassName =
   "fill-none stroke-amber-100/100 stroke-[42] [stroke-linecap:round]";
 const markerClassName = "pointer-events-none absolute inset-0 h-full w-full";
@@ -26,15 +27,23 @@ const starClassName = "pointer-events-none absolute inset-0 h-full w-full";
 
 const MIN_CORE_ARC_MINUTES = 60;
 const MAX_CORE_ARC_MINUTES = 240;
-const CORE_DAYLIGHT_RATIO = 0.4;
+const CORE_DAYLIGHT_RATIO = 0.2;
 const SUN_EVENT_MARKER_RADIUS = 36;
-const NIGHT_ARC_WIDTH = 150;
-const NIGHT_STAR_INNER_RADIUS = SUN_ARC_RADIUS - NIGHT_ARC_WIDTH / 2 + 18;
-const NIGHT_STAR_OUTER_RADIUS = SUN_ARC_RADIUS + NIGHT_ARC_WIDTH / 2 - 18;
-const NIGHT_STAR_CLIP_INNER_RADIUS = SUN_ARC_RADIUS - NIGHT_ARC_WIDTH / 2;
-const NIGHT_STAR_CLIP_OUTER_RADIUS = SUN_ARC_RADIUS + NIGHT_ARC_WIDTH / 2;
+const PLASTER_RING_WIDTH = 132;
+const PLASTER_RING_INNER_RADIUS = SUN_ARC_RADIUS - PLASTER_RING_WIDTH / 2;
+const PLASTER_RING_OUTER_RADIUS = SUN_ARC_RADIUS + PLASTER_RING_WIDTH / 2;
+const NIGHT_STAR_INNER_RADIUS = PLASTER_RING_INNER_RADIUS + 18;
+const NIGHT_STAR_OUTER_RADIUS = PLASTER_RING_OUTER_RADIUS - 18;
+const NIGHT_STAR_CLIP_INNER_RADIUS = PLASTER_RING_INNER_RADIUS;
+const NIGHT_STAR_CLIP_OUTER_RADIUS = PLASTER_RING_OUTER_RADIUS;
 
 export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
+  const svgId = useId().replace(/:/g, "");
+  const nightStarsClipPathId = `${svgId}-night-stars-clip`;
+  const nightStarGlowFilterId = `${svgId}-night-star-glow`;
+  const plasterClipPathId = `${svgId}-sun-arc-plaster-ring-clip`;
+  const softArcFilterId = `${svgId}-sun-arc-soft-filter`;
+
   if (sunWindow.status === "normal") {
     const corePath = getZenithArcPath(
       sunWindow.sunriseMinutes,
@@ -56,15 +65,26 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
           viewBox={CLOCK_VIEW_BOX}
           aria-hidden="true"
         >
-          <path className={nightClassName} d={nightPath} />
-          <path className={glowClassName} d={corePath} />
-          <path className={coreClassName} d={corePath} />
+          <defs>
+            <PlasterRingClipPath id={plasterClipPathId} />
+            <SoftArcFilter id={softArcFilterId} />
+          </defs>
+          <g clipPath={`url(#${plasterClipPathId})`}>
+            <g filter={`url(#${softArcFilterId})`}>
+              <path className={nightClassName} d={nightPath} />
+              <path className={glowClassName} d={corePath} />
+              <path className={coreClassName} d={corePath} />
+            </g>
+          </g>
         </svg>
         <NightStarsOverlay
           clipPath={getNightSegmentClipPath(
             sunWindow.sunsetMinutes,
             sunWindow.sunriseMinutes,
           )}
+          clipPathId={nightStarsClipPathId}
+          glowFilterId={nightStarGlowFilterId}
+          plasterClipPathId={plasterClipPathId}
           stars={getNightStars(
             sunWindow.sunsetMinutes,
             normalizeMinutes(
@@ -72,7 +92,10 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
             ),
           )}
         />
-        <SunEventHourMarkers hours={markerHours} />
+        <SunEventHourMarkers
+          hours={markerHours}
+          plasterClipPathId={plasterClipPathId}
+        />
       </>
     );
   }
@@ -85,15 +108,26 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
           viewBox={CLOCK_VIEW_BOX}
           aria-hidden="true"
         >
-          <circle
-            className={nightClassName}
-            cx={CLOCK_CENTER}
-            cy={CLOCK_CENTER}
-            r={SUN_ARC_RADIUS}
-          />
+          <defs>
+            <PlasterRingClipPath id={plasterClipPathId} />
+            <SoftArcFilter id={softArcFilterId} />
+          </defs>
+          <g clipPath={`url(#${plasterClipPathId})`}>
+            <g filter={`url(#${softArcFilterId})`}>
+              <circle
+                className={nightClassName}
+                cx={CLOCK_CENTER}
+                cy={CLOCK_CENTER}
+                r={SUN_ARC_RADIUS}
+              />
+            </g>
+          </g>
         </svg>
         <NightStarsOverlay
           clipPath={getFullNightRingClipPath()}
+          clipPathId={nightStarsClipPathId}
+          glowFilterId={nightStarGlowFilterId}
+          plasterClipPathId={plasterClipPathId}
           stars={getNightStars(0, 1440)}
         />
       </>
@@ -104,36 +138,53 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
 
   return (
     <svg className={arcClassName} viewBox={CLOCK_VIEW_BOX} aria-hidden="true">
-      <path className={glowClassName} d={corePath} />
-      <path className={coreClassName} d={corePath} />
+      <defs>
+        <PlasterRingClipPath id={plasterClipPathId} />
+        <SoftArcFilter id={softArcFilterId} />
+      </defs>
+      <g clipPath={`url(#${plasterClipPathId})`}>
+        <g filter={`url(#${softArcFilterId})`}>
+          <path className={glowClassName} d={corePath} />
+          <path className={coreClassName} d={corePath} />
+        </g>
+      </g>
     </svg>
   );
 }
 
 interface SunEventHourMarkersProps {
   hours: number[];
+  plasterClipPathId: string;
 }
 
-function SunEventHourMarkers({ hours }: SunEventHourMarkersProps) {
+function SunEventHourMarkers({
+  hours,
+  plasterClipPathId,
+}: SunEventHourMarkersProps) {
   return (
     <svg
       className={markerClassName}
       viewBox={CLOCK_VIEW_BOX}
       aria-hidden="true"
     >
-      {hours.map((hour) => {
-        const position = polarToCartesian(minutesToDegrees(hour * 60));
+      <defs>
+        <PlasterRingClipPath id={plasterClipPathId} />
+      </defs>
+      <g clipPath={`url(#${plasterClipPathId})`}>
+        {hours.map((hour) => {
+          const position = polarToCartesian(minutesToDegrees(hour * 60));
 
-        return (
-          <circle
-            key={hour}
-            className={markerCircleClassName}
-            cx={position.x}
-            cy={position.y}
-            r={SUN_EVENT_MARKER_RADIUS}
-          />
-        );
-      })}
+          return (
+            <circle
+              key={hour}
+              className={markerCircleClassName}
+              cx={position.x}
+              cy={position.y}
+              r={SUN_EVENT_MARKER_RADIUS}
+            />
+          );
+        })}
+      </g>
     </svg>
   );
 }
@@ -149,23 +200,27 @@ interface NightStar {
 
 interface NightStarsOverlayProps {
   clipPath: string;
+  clipPathId: string;
+  glowFilterId: string;
+  plasterClipPathId: string;
   stars: NightStar[];
 }
 
-function NightStarsOverlay({ clipPath, stars }: NightStarsOverlayProps) {
+function NightStarsOverlay({
+  clipPath,
+  clipPathId,
+  glowFilterId,
+  plasterClipPathId,
+  stars,
+}: NightStarsOverlayProps) {
   return (
     <svg className={starClassName} viewBox={CLOCK_VIEW_BOX} aria-hidden="true">
       <defs>
-        <clipPath id="night-stars-clip">
+        <PlasterRingClipPath id={plasterClipPathId} />
+        <clipPath id={clipPathId}>
           <path d={clipPath} fillRule="evenodd" clipRule="evenodd" />
         </clipPath>
-        <filter
-          id="night-star-glow"
-          x="-80%"
-          y="-80%"
-          width="260%"
-          height="260%"
-        >
+        <filter id={glowFilterId} x="-80%" y="-80%" width="260%" height="260%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
@@ -174,26 +229,59 @@ function NightStarsOverlay({ clipPath, stars }: NightStarsOverlayProps) {
         </filter>
       </defs>
 
-      <g clipPath="url(#night-stars-clip)">
-        {stars.map((star) => (
-          <g
-            key={`${star.x}-${star.y}`}
-            transform={`translate(${star.x.toFixed(3)} ${star.y.toFixed(3)}) rotate(${star.angle.toFixed(3)}) scale(${star.size.toFixed(3)})`}
-            opacity={star.opacity}
-            filter="url(#night-star-glow)"
-          >
-            <path
-              d="M0 -1 L0.12 -0.28 L0.5 -0.5 L0.28 -0.12 L1 0 L0.28 0.12 L0.5 0.5 L0.12 0.28 L0 1 L-0.12 0.28 L-0.5 0.5 L-0.28 0.12 L-1 0 L-0.28 -0.12 L-0.5 -0.5 L-0.12 -0.28 Z"
-              fill="#f6c744"
-            />
-            <path
-              d="M0 -0.58 L0.07 -0.16 L0.3 -0.3 L0.16 -0.07 L0.58 0 L0.16 0.07 L0.3 0.3 L0.07 0.16 L0 0.58 L-0.07 0.16 L-0.3 0.3 L-0.16 0.07 L-0.58 0 L-0.16 -0.07 L-0.3 -0.3 L-0.07 -0.16 Z"
-              fill="#fff1a6"
-            />
-          </g>
-        ))}
+      <g clipPath={`url(#${plasterClipPathId})`}>
+        <g clipPath={`url(#${clipPathId})`}>
+          {stars.map((star) => (
+            <g
+              key={`${star.x}-${star.y}`}
+              transform={`translate(${star.x.toFixed(3)} ${star.y.toFixed(3)}) rotate(${star.angle.toFixed(3)}) scale(${star.size.toFixed(3)})`}
+              opacity={star.opacity}
+              filter={`url(#${glowFilterId})`}
+            >
+              <path
+                d="M0 -1 L0.12 -0.28 L0.5 -0.5 L0.28 -0.12 L1 0 L0.28 0.12 L0.5 0.5 L0.12 0.28 L0 1 L-0.12 0.28 L-0.5 0.5 L-0.28 0.12 L-1 0 L-0.28 -0.12 L-0.5 -0.5 L-0.12 -0.28 Z"
+                fill="#f6c744"
+              />
+              <path
+                d="M0 -0.58 L0.07 -0.16 L0.3 -0.3 L0.16 -0.07 L0.58 0 L0.16 0.07 L0.3 0.3 L0.07 0.16 L0 0.58 L-0.07 0.16 L-0.3 0.3 L-0.16 0.07 L-0.58 0 L-0.16 -0.07 L-0.3 -0.3 L-0.07 -0.16 Z"
+                fill="#fff1a6"
+              />
+            </g>
+          ))}
+        </g>
       </g>
     </svg>
+  );
+}
+
+interface SvgDefProps {
+  id: string;
+}
+
+function PlasterRingClipPath({ id }: SvgDefProps) {
+  return (
+    <clipPath id={id}>
+      <path
+        d={getPlasterRingClipPath()}
+        fillRule="evenodd"
+        clipRule="evenodd"
+      />
+    </clipPath>
+  );
+}
+
+function SoftArcFilter({ id }: SvgDefProps) {
+  return (
+    <filter
+      id={id}
+      x="0"
+      y="0"
+      width="1200"
+      height="1200"
+      filterUnits="userSpaceOnUse"
+    >
+      <feGaussianBlur stdDeviation="24" />
+    </filter>
   );
 }
 
@@ -362,6 +450,17 @@ function getFullNightRingClipPath() {
     `M ${CLOCK_CENTER} ${CLOCK_CENTER - NIGHT_STAR_CLIP_INNER_RADIUS}`,
     `A ${NIGHT_STAR_CLIP_INNER_RADIUS} ${NIGHT_STAR_CLIP_INNER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER + NIGHT_STAR_CLIP_INNER_RADIUS}`,
     `A ${NIGHT_STAR_CLIP_INNER_RADIUS} ${NIGHT_STAR_CLIP_INNER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER - NIGHT_STAR_CLIP_INNER_RADIUS}`,
+  ].join(" ");
+}
+
+function getPlasterRingClipPath() {
+  return [
+    `M ${CLOCK_CENTER} ${CLOCK_CENTER - PLASTER_RING_OUTER_RADIUS}`,
+    `A ${PLASTER_RING_OUTER_RADIUS} ${PLASTER_RING_OUTER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER + PLASTER_RING_OUTER_RADIUS}`,
+    `A ${PLASTER_RING_OUTER_RADIUS} ${PLASTER_RING_OUTER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER - PLASTER_RING_OUTER_RADIUS}`,
+    `M ${CLOCK_CENTER} ${CLOCK_CENTER - PLASTER_RING_INNER_RADIUS}`,
+    `A ${PLASTER_RING_INNER_RADIUS} ${PLASTER_RING_INNER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER + PLASTER_RING_INNER_RADIUS}`,
+    `A ${PLASTER_RING_INNER_RADIUS} ${PLASTER_RING_INNER_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER - PLASTER_RING_INNER_RADIUS}`,
   ].join(" ");
 }
 
