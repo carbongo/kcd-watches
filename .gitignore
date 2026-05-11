@@ -134,6 +134,7 @@ typings/
 
 # webpack build output
 build
+dist
 public
 
 ### Windows ###
