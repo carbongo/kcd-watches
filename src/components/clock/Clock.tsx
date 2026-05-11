@@ -53,7 +53,7 @@ export function Clock({ city }: ClockProps) {
           aria-hidden="true"
         />
 
-        <TimeReadout time={time} sunWindow={sunWindow} />
+        <TimeReadout date={now} time={time} sunWindow={sunWindow} />
       </section>
     </main>
   );

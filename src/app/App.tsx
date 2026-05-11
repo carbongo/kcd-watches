@@ -27,7 +27,7 @@ export function App() {
   return (
     <>
       <Clock city={selectedCity} />
-      <div className="fixed right-3 bottom-3 z-50 flex flex-col items-end gap-2 text-white ">
+      <div className="fixed right-3 bottom-3 z-50 flex flex-col items-end gap-1 md:gap-2 text-white ">
         <SettingsMenu
           cities={getTimeZoneCities()}
           selectedTimeZone={selectedCity.timeZone}
