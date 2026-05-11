@@ -9,38 +9,51 @@ const CENTER = 600;
 const RADIUS = 446;
 const arcClassName =
   "pointer-events-none absolute inset-0 h-full w-full mix-blend-screen";
+const nightClassName =
+  "fill-none stroke-blue-950/80 stroke-[113] [stroke-linecap:round]";
 const glowClassName =
   "fill-none stroke-amber-300/25 stroke-[113] [stroke-linecap:round]";
 const coreClassName =
   "fill-none stroke-amber-400/70 stroke-[64] [stroke-linecap:round]";
+
 const MIN_CORE_ARC_MINUTES = 60;
 const MAX_CORE_ARC_MINUTES = 240;
 const CORE_DAYLIGHT_RATIO = 0.4;
 
 export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
   if (sunWindow.status === "normal") {
-    const path = getArcPath(sunWindow.sunriseMinutes, sunWindow.sunsetMinutes);
     const corePath = getZenithArcPath(
       sunWindow.sunriseMinutes,
       sunWindow.sunsetMinutes,
     );
+    const nightPath = getArcPath(
+      sunWindow.sunsetMinutes,
+      sunWindow.sunriseMinutes,
+    );
 
     return (
       <svg className={arcClassName} viewBox="0 0 1200 1200" aria-hidden="true">
-        <path className={glowClassName} d={path} />
+        <path className={nightClassName} d={nightPath} />
+        <path className={glowClassName} d={corePath} />
         <path className={coreClassName} d={corePath} />
       </svg>
     );
   }
 
   if (sunWindow.status === "polar-night") {
-    return null;
+    return (
+      <svg className={arcClassName} viewBox="0 0 1200 1200" aria-hidden="true">
+        <circle className={nightClassName} cx={CENTER} cy={CENTER} r={RADIUS} />
+      </svg>
+    );
   }
+
+  const corePath = getArcPath(540, 900);
 
   return (
     <svg className={arcClassName} viewBox="0 0 1200 1200" aria-hidden="true">
-      <circle className={glowClassName} cx={CENTER} cy={CENTER} r={RADIUS} />
-      <path className={coreClassName} d={getArcPath(540, 900)} />
+      <path className={glowClassName} d={corePath} />
+      <path className={coreClassName} d={corePath} />
     </svg>
   );
 }
