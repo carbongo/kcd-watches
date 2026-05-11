@@ -1,10 +1,10 @@
-# KCD Watches
+# Bohemian Day Clock
 
-KCD Watches is a browser-based, Kingdom Come: Deliverance inspired 24-hour clock. It pairs a painted dial and fixed pointer with SVG overlays for hour labels, daylight and night arcs, celestial markers, and a live local-time readout.
+Bohemian Day Clock is a browser-based 24-hour clock with a custom-drawn dark dial, fixed pointer, SVG overlays for hour labels, daylight and night arcs, celestial markers, and a live local-time readout.
 
-Not affiliated with Warhorse Studios.
+All clock artwork is drawn in this repository as custom React/SVG components. The app does not include game assets, logos, proprietary fonts, screenshots, copied art, or traced UI elements.
 
-![KCD Watches screenshot](screenshot.png)
+![Bohemian Day Clock screenshot](screenshot.png)
 
 ## Highlights
 
@@ -99,9 +99,13 @@ npm run build
 
 Generated folders such as `public/`, `dist/`, `.parcel-cache/`, and `node_modules/` are intentionally ignored.
 
-## Attribution
+## Inspiration And Disclaimer
 
-KCD Watches is a fan-made project inspired by the clock aesthetic of Kingdom Come: Deliverance. It is not endorsed by, sponsored by, nor affiliated with Warhorse Studios.
+Bohemian Day Clock is an unofficial fan project with custom React/SVG artwork, loosely inspired by the medieval clock aesthetic in Kingdom Come: Deliverance.
+
+This project is not affiliated with, endorsed by, sponsored by, or approved by Warhorse Studios. Kingdom Come: Deliverance and Warhorse Studios are trademarks of their respective owners.
+
+Avoid adding third-party logos, game screenshots, proprietary fonts, copied art, traced UI elements, or character/place names from commercial games.
 
 ## License
 

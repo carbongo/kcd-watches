@@ -25,7 +25,7 @@ export function Clock({ city }: ClockProps) {
     <main className="min-h-screen overflow-hidden bg-black text-white">
       <section
         className="relative mx-auto grid h-screen w-screen place-items-center overflow-hidden"
-        aria-label="KCD Watches"
+        aria-label="Bohemian Day Clock"
       >
         <ClockFace />
 

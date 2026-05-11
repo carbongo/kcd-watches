@@ -10,8 +10,8 @@ import {
   isKnownTimeZoneCity,
 } from "../domain/timeZones";
 
-const SELECTED_CITY_STORAGE_KEY = "kcd-watches.selectedTimeZone";
-const REPOSITORY_URL = "https://github.com/carbongo/kcd-watches";
+const SELECTED_CITY_STORAGE_KEY = "bohemian-day-clock.selectedTimeZone";
+const REPOSITORY_URL = "https://github.com/carbongo/bohemian-day-clock";
 
 export function App() {
   const [selectedTimeZone, setSelectedTimeZone] = useState(getInitialTimeZone);

@@ -1,7 +1,7 @@
 {
-  "name": "kcd-watches",
+  "name": "bohemian-day-clock",
   "version": "2.0.0-experimental",
-  "description": "Kingdom Come: Deliverance inspired watches",
+  "description": "Custom-drawn 24-hour daylight clock",
   "private": true,
   "source": "src/index.html",
   "scripts": {
@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/carbongo/kcd-watches.git"
+    "url": "https://github.com/carbongo/bohemian-day-clock.git"
   },
   "author": "George An. (https://github.com/carbongo)",
   "license": "ISC",
   "keywords": [
-    "kingdom come",
-    "henry",
-    "watches",
-    "replica",
+    "clock",
+    "medieval",
+    "daylight",
+    "astronomical",
     "html",
     "typescript",
     "react",
@@ -32,9 +32,9 @@
     "parcel"
   ],
   "bugs": {
-    "url": "https://github.com/carbongo/kcd-watches/issues"
+    "url": "https://github.com/carbongo/bohemian-day-clock/issues"
   },
-  "homepage": "https://github.com/carbongo/kcd-watches#readme",
+  "homepage": "https://github.com/carbongo/bohemian-day-clock#readme",
   "dependencies": {
     "react": "^19.2.6",
     "react-dom": "^19.2.6"

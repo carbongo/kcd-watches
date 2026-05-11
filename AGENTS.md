@@ -4,7 +4,7 @@ Guidance for LLM agents working in this repository.
 
 ## Project
 
-KCD Watches is a small React, TypeScript, Tailwind CSS, and Parcel app that renders a Kingdom Come: Deliverance inspired clock. Production output is a single inlined `public/index.html` file.
+Bohemian Day Clock is a small React, TypeScript, Tailwind CSS, and Parcel app that renders a custom-drawn 24-hour clock with a medieval-inspired visual treatment. Production output is a single inlined `public/index.html` file.
 
 ## Commands
 

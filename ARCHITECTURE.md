@@ -1,6 +1,6 @@
 # Architecture
 
-KCD Watches is a client-only clock app. It renders a game-inspired 24-hour dial with a rotating SVG overlay, local time, and a computed daylight window for the browser's resolved timezone.
+Bohemian Day Clock is a client-only clock app. It renders a custom-drawn 24-hour dial with a medieval-inspired visual treatment, rotating SVG overlay, local time, and a computed daylight window for the browser's resolved timezone.
 
 ## Stack
 
@@ -31,7 +31,7 @@ Pure TypeScript logic with no React imports:
 
 - `time.ts`: Clock time extraction, time labels, day/hour constants, and minute normalization.
 - `sun.ts`: Sunrise/sunset calculation using the NOAA-style official zenith formula. It returns normal, polar-day, or polar-night sun windows.
-- `timeZones.ts`: Small mapping from IANA timezone IDs to representative city coordinates, with Almaty as fallback.
+- `timeZones.ts`: Small mapping from IANA timezone IDs to representative city coordinates, with Kutna Hora as fallback.
 
 ### `src/components/clock`
 
