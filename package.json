@@ -1,45 +1,54 @@
 {
-    "name": "kcd-watches",
-    "version": "1.0.0",
-    "description": "Kingdom Come: Deliverance inspired watches",
-    "private": true,
-    "scripts": {
-        "start": "webpack-dev-server --env.mode=development",
-        "build": "webpack --env.mode=production --progress --profile --colors"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/carbongo/kcd-watches.git"
-    },
-    "author": "George An. (https://github.com/carbongo)",
-    "license": "ISC",
-    "keywords": [
-        "kingdom come",
-        "henry",
-        "watches",
-        "replica",
-        "html",
-        "javascript",
-        "css"
-    ],
-    "bugs": {
-        "url": "https://github.com/carbongo/kcd-watches/issues"
-    },
-    "homepage": "https://github.com/carbongo/kcd-watches#readme",
-    "devDependencies": {
-        "@babel/core": "^7.5.5",
-        "@babel/preset-env": "^7.5.5",
-        "babel-loader": "^8.0.6",
-        "base64-inline-loader": "^1.1.1",
-        "css-loader": "^3.2.0",
-        "html-webpack-inline-source-plugin": "0.0.10",
-        "html-webpack-plugin": "^3.2.0",
-        "less": "^3.10.3",
-        "less-loader": "^5.0.0",
-        "style-loader": "^1.0.0",
-        "webpack": "^4.39.3",
-        "webpack-cli": "^3.3.7",
-        "webpack-dev-server": "^3.8.0"
-    },
-    "dependencies": {}
+  "name": "kcd-watches",
+  "version": "2.0.0-experimental",
+  "description": "Kingdom Come: Deliverance inspired watches",
+  "private": true,
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel src/index.html --port 8000",
+    "build": "parcel build src/index.html --dist-dir public --public-url ./ --no-source-maps && node scripts/inline-output.mjs public/index.html",
+    "typecheck": "tsc --noEmit"
+  },
+  "targets": {
+    "default": {
+      "distDir": "public"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carbongo/kcd-watches.git"
+  },
+  "author": "George An. (https://github.com/carbongo)",
+  "license": "ISC",
+  "keywords": [
+    "kingdom come",
+    "henry",
+    "watches",
+    "replica",
+    "html",
+    "typescript",
+    "react",
+    "tailwind",
+    "parcel"
+  ],
+  "bugs": {
+    "url": "https://github.com/carbongo/kcd-watches/issues"
+  },
+  "homepage": "https://github.com/carbongo/kcd-watches#readme",
+  "dependencies": {
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@parcel/optimizer-data-url": "^2.16.4",
+    "@parcel/transformer-inline-string": "^2.16.4",
+    "@parcel/transformer-js": "^2.12.0",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "parcel": "^2.12.0",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3"
+  }
 }
