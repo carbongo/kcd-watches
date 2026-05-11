@@ -8,7 +8,11 @@ export interface ClockTime {
   seconds: number;
 }
 
-export function getClockTime(date: Date): ClockTime {
+export function getClockTime(date: Date, timeZone?: string): ClockTime {
+  if (timeZone) {
+    return getClockTimeInTimeZone(date, timeZone);
+  }
+
   return {
     hours: date.getHours(),
     minutes: date.getMinutes(),
@@ -30,6 +34,36 @@ export function getTimeLabel({ hours, minutes, seconds }: ClockTime) {
 
 function formatTimePart(value: number) {
   return value.toString().padStart(2, "0");
+}
+
+function getClockTimeInTimeZone(date: Date, timeZone: string): ClockTime {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    hour12: false,
+    hourCycle: "h23",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone,
+  }).formatToParts(date);
+
+  return {
+    hours: Number(getDateTimePart(parts, "hour")),
+    minutes: Number(getDateTimePart(parts, "minute")),
+    seconds: Number(getDateTimePart(parts, "second")),
+  };
+}
+
+function getDateTimePart(
+  parts: Intl.DateTimeFormatPart[],
+  type: Intl.DateTimeFormatPartTypes,
+) {
+  const value = parts.find((part) => part.type === type)?.value;
+
+  if (!value) {
+    throw new Error(`Missing ${type} date part.`);
+  }
+
+  return value;
 }
 
 export function normalizeMinutes(minutes: number) {

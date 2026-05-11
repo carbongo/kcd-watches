@@ -52,7 +52,7 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
       <ClockSvg>
         <defs>
           <RingClipPath id={plasterClipPathId} path={PLASTER_RING_CLIP_PATH} />
-          <SoftBlurFilter id={softArcFilterId} stdDeviation={24} />
+          <SoftBlurFilter id={softArcFilterId} stdDeviation={32} />
         </defs>
         <g clipPath={`url(#${plasterClipPathId})`}>
           <g filter={`url(#${softArcFilterId})`}>

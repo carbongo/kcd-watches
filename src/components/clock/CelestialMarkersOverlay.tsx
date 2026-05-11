@@ -3,7 +3,12 @@ import {
   minutesToDegrees,
   polarToCartesian,
 } from "./clockGeometry";
-import { ClockSvg, GlowFilter, RingClipPath } from "./clockSvgDefs";
+import {
+  ClockSvg,
+  GlowFilter,
+  RingClipPath,
+  SoftBlurFilter,
+} from "./clockSvgDefs";
 
 const MOON_HOUR = 0;
 const SUN_HOUR = 12;
@@ -28,6 +33,7 @@ export function CelestialMarkersOverlay() {
         </radialGradient>
         <RingClipPath id="celestial-arc-clip" path={PLASTER_RING_CLIP_PATH} />
         <GlowFilter id="celestial-sun-glow" stdDeviation={8} />
+        <SoftBlurFilter id="celestial-sun-halo-blur" stdDeviation={20} />
       </defs>
 
       <g clipPath="url(#celestial-arc-clip)">
@@ -39,6 +45,7 @@ export function CelestialMarkersOverlay() {
               r="92"
               fill="#eebb00"
               opacity="0.25"
+              filter="url(#celestial-sun-halo-blur)"
             />
             {sunRays.map((ray) => (
               <path

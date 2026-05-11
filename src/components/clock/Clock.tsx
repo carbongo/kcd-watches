@@ -2,7 +2,7 @@ import arrowImage from "data-url:../../images/arrow.png";
 import faceImage from "data-url:../../images/face.png";
 import { getClockRotationDegrees, getClockTime } from "../../domain/time";
 import { getSunWindow } from "../../domain/sun";
-import { getTimeZoneCity } from "../../domain/timeZones";
+import type { TimeZoneCity } from "../../domain/timeZones";
 import { useNow } from "../../hooks/useNow";
 import { CelestialMarkersOverlay } from "./CelestialMarkersOverlay";
 import { HourLabelsOverlay } from "./HourLabelsOverlay";
@@ -11,10 +11,13 @@ import { PlasterArcBorders, PlasterArcOverlay } from "./PlasterArcOverlay";
 import { SunArcOverlay } from "./SunArcOverlay";
 import { TimeReadout } from "./TimeReadout";
 
-export function Clock() {
+interface ClockProps {
+  city: TimeZoneCity;
+}
+
+export function Clock({ city }: ClockProps) {
   const now = useNow();
-  const time = getClockTime(now);
-  const city = getTimeZoneCity();
+  const time = getClockTime(now, city.timeZone);
   const sunWindow = getSunWindow(now, city);
   const clockRotation = getClockRotationDegrees(time);
 
