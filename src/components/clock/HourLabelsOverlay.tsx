@@ -8,8 +8,8 @@ import {
   getRoundedSunEventHours,
   minutesToDegrees,
   polarToCartesian,
-} from "./clockGeometry";
-import { ClockSvg } from "./clockSvgDefs";
+} from "./lib/clockGeometry";
+import { ClockSvg } from "./lib/clockSvgDefs";
 
 const HOURS = Array.from({ length: HOURS_PER_DAY }, (_, hour) => hour);
 const textClassName =
@@ -34,7 +34,7 @@ export function HourLabelsOverlay({ sunWindow }: HourLabelsOverlayProps) {
       : [];
 
   return (
-    <ClockSvg>
+    <ClockSvg id="hour-labels-overlay-svg">
       {HOURS.map((hour) => {
         const angle = minutesToDegrees(hour * MINUTES_PER_HOUR);
         const position = polarToCartesian(angle);

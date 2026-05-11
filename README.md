@@ -14,7 +14,7 @@ Not affiliated with Warhorse Studios.
 - Preset city picker with the browser's current timezone shown first.
 - Keyboard shortcuts for settings (`S`) and the GitHub link (`G`).
 - Built-in independent time, timezone, and solar calculations.
-- Single-file production build: CSS, JavaScript, and images are inlined into `public/index.html`.
+- Single-file production build: CSS and JavaScript are inlined into `public/index.html`.
 
 ## Quick Start
 
@@ -49,9 +49,9 @@ The built HTML file can be opened directly from the filesystem without a local s
 
 ## Build Output
 
-Production output is intentionally self-contained. The app imports dial and pointer PNGs through Parcel `data-url:` specifiers, then `scripts/inline-output.mjs` folds Parcel's generated CSS and JavaScript back into `public/index.html` and removes sibling generated assets.
+Production output is intentionally self-contained. Clock visuals are rendered as React SVG components, and `scripts/inline-output.mjs` folds Parcel's generated CSS and JavaScript back into `public/index.html` and removes sibling generated assets.
 
-This keeps the release artifact simple: one HTML file that carries the app, styles, scripts, and image data.
+This keeps the release artifact simple: one HTML file that carries the app, styles, and scripts.
 
 ## Project Layout
 
@@ -63,7 +63,6 @@ src/
   components/settings/ Settings menu and city picker
   domain/              Pure time, timezone, and solar calculations
   hooks/               React hooks
-  images/              Dial and pointer assets
   styles/              Tailwind entry CSS
   index.html           Parcel HTML entry
   main.tsx             React bootstrap
@@ -78,9 +77,9 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full stack and module map. See 
 - React renders the app shell and focused clock overlay components.
 - TypeScript keeps runtime-independent date and solar logic in `src/domain`.
 - Tailwind CSS handles layout and visual treatment.
-- Parcel provides the dev server, image data-url imports, and production bundling.
-- `src/components/clock/clockGeometry.ts` owns the shared 1200 x 1200 SVG coordinate math.
-- `src/components/clock/clockSvgDefs.tsx` owns reusable SVG wrappers, filters, and definitions.
+- Parcel provides the dev server and production bundling.
+- `src/components/clock/lib/clockGeometry.ts` owns the shared 1200 x 1200 SVG coordinate math.
+- `src/components/clock/lib/clockSvgDefs.tsx` owns reusable SVG wrappers, filters, and definitions.
 
 ## Contributing
 

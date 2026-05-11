@@ -21,7 +21,7 @@ KCD Watches is a client-only clock app. It renders a game-inspired 24-hour dial 
    - `ClockTime` from `src/domain/time.ts`
    - a browser-resolved `TimeZoneCity` from `src/domain/timeZones.ts`
    - a `SunWindow` from `src/domain/sun.ts`
-6. Clock overlays render against the shared 1200 x 1200 SVG coordinate system from `clockGeometry.ts`.
+6. Clock overlays render against the shared 1200 x 1200 SVG coordinate system from `src/components/clock/lib/clockGeometry.ts`.
 
 ## Source Layout
 
@@ -37,15 +37,17 @@ Pure TypeScript logic with no React imports:
 
 The visual clock is split into focused overlays:
 
-- `Clock.tsx`: Composes images, rotating overlay layers, and the readout.
+- `Clock.tsx`: Composes the SVG face, rotating overlay layers, fixed pointer, and the readout.
+- `ClockFace.tsx`: Draws the dark textured dial face as SVG.
+- `ClockPointer.tsx`: Draws the fixed gold pointer as SVG.
 - `PlasterArcOverlay.tsx`: Draws the plaster ring and gold borders.
 - `NightOverlay.tsx`: Draws night arc glow and deterministic star marks.
 - `SunArcOverlay.tsx`: Draws daylight zenith glow and sunrise/sunset hour markers.
 - `CelestialMarkersOverlay.tsx`: Draws fixed sun and moon markers on the ring.
 - `HourLabelsOverlay.tsx`: Draws 24-hour labels and colors them by daylight state.
 - `TimeReadout.tsx`: Shows current time and the resolved city sunrise/sunset label.
-- `clockGeometry.ts`: Shared polar coordinate math, ring paths, arc paths, and rounded sun-event hour helpers.
-- `clockSvgDefs.tsx`: Shared `ClockSvg` wrapper plus reusable clip path and filter definitions.
+- `lib/clockGeometry.ts`: Shared polar coordinate math, ring paths, arc paths, and rounded sun-event hour helpers.
+- `lib/clockSvgDefs.tsx`: Shared `ClockSvg` wrapper plus reusable clip path and filter definitions.
 
 ### `src/components/settings`
 
@@ -59,9 +61,8 @@ Settings and action-menu UI is split into reusable, one-component files:
 
 ### Assets and Styles
 
-- `src/images/face.png` and `src/images/arrow.png` are imported with Parcel `data-url:` specifiers so they can be embedded into the final document.
 - `src/styles/tailwind.css` imports Tailwind and is the single CSS entry.
-- `src/types/assets.d.ts` declares Parcel data-url image imports for TypeScript.
+- `src/types/assets.d.ts` declares CSS imports for TypeScript.
 
 ### Build Output
 
@@ -71,7 +72,7 @@ Generated folders are ignored by git.
 
 ## Design Constraints
 
-- The face image and pointer image are separate static assets.
+- The face and pointer are separate SVG components in the clock layer.
 - The animated clock layer rotates as one absolute-positioned group over the fixed face.
 - Visual overlays should share geometry helpers to keep the 1200 x 1200 coordinate system consistent.
 - Reusable settings/action UI components should live in separate component files, not inside `SettingsMenu.tsx` or bundled together in a multi-component file.

@@ -3,8 +3,8 @@ import {
   PLASTER_RING_CLIP_PATH,
   PLASTER_RING_INNER_RADIUS,
   PLASTER_RING_OUTER_RADIUS,
-} from "./clockGeometry";
-import { ClockSvg } from "./clockSvgDefs";
+} from "./lib/clockGeometry";
+import { ClockSvg } from "./lib/clockSvgDefs";
 
 const crackPaths = [
   "M424 120c-10 19 3 31-7 48-7 12-24 12-26 29-2 13 9 19 4 31-5 13-21 15-28 28",
@@ -56,7 +56,7 @@ const hairlineCracks = [
 
 export function PlasterArcOverlay() {
   return (
-    <ClockSvg>
+    <ClockSvg id="plaster-arc-overlay-svg">
       <defs>
         <radialGradient id="plaster-fill" cx="50%" cy="50%" r="55%">
           <stop offset="55%" stopColor="#f4f1df" />
@@ -124,46 +124,78 @@ export function PlasterArcOverlay() {
 
 export function PlasterArcBorders() {
   return (
-    <ClockSvg>
+    <ClockSvg id="plaster-arc-borders-svg">
       <defs>
-        <linearGradient id="gold-border" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fff0a7" />
-          <stop offset="0.28" stopColor="#d4a52d" />
-          <stop offset="0.58" stopColor="#f7d85a" />
-          <stop offset="1" stopColor="#8f6416" />
-        </linearGradient>
+        <radialGradient
+          id="gold-outer-border"
+          cx={CLOCK_CENTER}
+          cy={CLOCK_CENTER}
+          r={PLASTER_RING_OUTER_RADIUS + 3}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.988" stopColor="#8c650e" />
+          <stop offset="0.992" stopColor="#d3a226" />
+          <stop offset="0.996" stopColor="#f5d25a" />
+          <stop offset="1" stopColor="#fff1a2" />
+        </radialGradient>
+        <radialGradient
+          id="gold-inner-border"
+          cx={CLOCK_CENTER}
+          cy={CLOCK_CENTER}
+          r={PLASTER_RING_INNER_RADIUS + 5}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.986" stopColor="#fff1a2" />
+          <stop offset="0.991" stopColor="#f5d25a" />
+          <stop offset="0.996" stopColor="#d3a226" />
+          <stop offset="1" stopColor="#8c650e" />
+        </radialGradient>
+        <filter
+          id="gold-border-shadow"
+          x="70"
+          y="70"
+          width="1060"
+          height="1060"
+          filterUnits="userSpaceOnUse"
+        >
+          <feDropShadow
+            dx="0"
+            dy="3"
+            stdDeviation="2.6"
+            floodColor="#000000"
+            floodOpacity="0.4"
+          />
+        </filter>
       </defs>
 
-      <g fill="none">
+      <g fill="none" filter="url(#gold-border-shadow)">
         <circle
           cx={CLOCK_CENTER}
           cy={CLOCK_CENTER}
           r={PLASTER_RING_OUTER_RADIUS}
           stroke="#68480f"
-          strokeWidth="7"
-          opacity="0.65"
+          strokeWidth="10"
         />
         <circle
           cx={CLOCK_CENTER}
           cy={CLOCK_CENTER}
           r={PLASTER_RING_OUTER_RADIUS - 2}
-          stroke="url(#gold-border)"
-          strokeWidth="4"
+          stroke="url(#gold-outer-border)"
+          strokeWidth="6"
         />
         <circle
           cx={CLOCK_CENTER}
           cy={CLOCK_CENTER}
           r={PLASTER_RING_INNER_RADIUS}
           stroke="#68480f"
-          strokeWidth="7"
-          opacity="0.65"
+          strokeWidth="10"
         />
         <circle
           cx={CLOCK_CENTER}
           cy={CLOCK_CENTER}
           r={PLASTER_RING_INNER_RADIUS + 2}
-          stroke="url(#gold-border)"
-          strokeWidth="4"
+          stroke="url(#gold-inner-border)"
+          strokeWidth="6"
         />
       </g>
     </ClockSvg>

@@ -1,10 +1,10 @@
-import arrowImage from "data-url:../../images/arrow.png";
-import faceImage from "data-url:../../images/face.png";
 import { getClockRotationDegrees, getClockTime } from "../../domain/time";
 import { getSunWindow } from "../../domain/sun";
 import type { TimeZoneCity } from "../../domain/timeZones";
 import { useNow } from "../../hooks/useNow";
 import { CelestialMarkersOverlay } from "./CelestialMarkersOverlay";
+import { ClockFace } from "./ClockFace";
+import { ClockPointer } from "./ClockPointer";
 import { HourLabelsOverlay } from "./HourLabelsOverlay";
 import { NightOverlay } from "./NightOverlay";
 import { PlasterArcBorders, PlasterArcOverlay } from "./PlasterArcOverlay";
@@ -27,12 +27,7 @@ export function Clock({ city }: ClockProps) {
         className="relative mx-auto grid h-screen w-screen place-items-center overflow-hidden"
         aria-label="KCD Watches"
       >
-        <img
-          className="absolute inset-0 z-10 m-auto h-full w-full object-contain"
-          src={faceImage}
-          alt=""
-          aria-hidden="true"
-        />
+        <ClockFace />
 
         <div
           className="absolute inset-0 z-20 m-auto h-full w-full object-contain transition-transform duration-1000 ease-out"
@@ -46,12 +41,7 @@ export function Clock({ city }: ClockProps) {
           <HourLabelsOverlay sunWindow={sunWindow} />
         </div>
 
-        <img
-          className="absolute inset-0 z-30 m-auto h-full w-full object-contain"
-          src={arrowImage}
-          alt=""
-          aria-hidden="true"
-        />
+        <ClockPointer />
 
         <TimeReadout date={now} time={time} sunWindow={sunWindow} />
       </section>

@@ -8,8 +8,8 @@ import {
   getRoundedSunEventHours,
   minutesToDegrees,
   polarToCartesian,
-} from "./clockGeometry";
-import { ClockSvg, RingClipPath, SoftBlurFilter } from "./clockSvgDefs";
+} from "./lib/clockGeometry";
+import { ClockSvg, RingClipPath, SoftBlurFilter } from "./lib/clockSvgDefs";
 
 interface SunArcOverlayProps {
   sunWindow: SunWindow;
@@ -29,6 +29,7 @@ const SUN_EVENT_MARKER_RADIUS = 36;
 export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
   const svgId = useId().replace(/:/g, "");
   const plasterClipPathId = `${svgId}-sun-arc-plaster-ring-clip`;
+  const markerClipPathId = `${svgId}-sun-event-marker-ring-clip`;
   const softArcFilterId = `${svgId}-sun-arc-soft-filter`;
 
   if (sunWindow.status === "polar-night") {
@@ -49,7 +50,7 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
 
   return (
     <>
-      <ClockSvg>
+      <ClockSvg id="sun-arc-overlay-svg">
         <defs>
           <RingClipPath id={plasterClipPathId} path={PLASTER_RING_CLIP_PATH} />
           <SoftBlurFilter id={softArcFilterId} stdDeviation={32} />
@@ -64,7 +65,7 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
       {markerHours.length > 0 ? (
         <SunEventHourMarkers
           hours={markerHours}
-          plasterClipPathId={plasterClipPathId}
+          plasterClipPathId={markerClipPathId}
         />
       ) : null}
     </>
@@ -81,7 +82,7 @@ function SunEventHourMarkers({
   plasterClipPathId,
 }: SunEventHourMarkersProps) {
   return (
-    <ClockSvg>
+    <ClockSvg id="sun-event-markers-overlay-svg">
       <defs>
         <RingClipPath id={plasterClipPathId} path={PLASTER_RING_CLIP_PATH} />
       </defs>

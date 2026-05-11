@@ -2,7 +2,7 @@ import {
   MINUTES_PER_DAY,
   MINUTES_PER_HOUR,
   normalizeMinutes,
-} from "../../domain/time";
+} from "../../../domain/time";
 
 export const CLOCK_CENTER = 600;
 export const SUN_ARC_RADIUS = 446;

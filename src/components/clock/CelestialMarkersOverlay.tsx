@@ -2,13 +2,13 @@ import {
   PLASTER_RING_CLIP_PATH,
   minutesToDegrees,
   polarToCartesian,
-} from "./clockGeometry";
+} from "./lib/clockGeometry";
 import {
   ClockSvg,
   GlowFilter,
   RingClipPath,
   SoftBlurFilter,
-} from "./clockSvgDefs";
+} from "./lib/clockSvgDefs";
 
 const MOON_HOUR = 0;
 const SUN_HOUR = 12;
@@ -20,7 +20,7 @@ const sunStretchTransform = `translate(${sunPosition.x} ${sunPosition.y}) scale(
 
 export function CelestialMarkersOverlay() {
   return (
-    <ClockSvg>
+    <ClockSvg id="celestial-markers-overlay-svg">
       <defs>
         <radialGradient id="celestial-sun-fill" cx="46%" cy="38%" r="62%">
           <stop offset="0" stopColor="#ffffbb" />

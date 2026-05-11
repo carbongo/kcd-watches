@@ -12,13 +12,13 @@ import {
   getRingClipPath,
   minutesToDegrees,
   polarToCartesian,
-} from "./clockGeometry";
+} from "./lib/clockGeometry";
 import {
   ClockSvg,
   GlowFilter,
   RingClipPath,
   SoftBlurFilter,
-} from "./clockSvgDefs";
+} from "./lib/clockSvgDefs";
 
 interface NightOverlayProps {
   sunWindow: SunWindow;
@@ -169,7 +169,7 @@ function NightArc({
   );
 
   return (
-    <ClockSvg>
+    <ClockSvg id="night-arc-overlay-svg">
       <defs>
         <RingClipPath id={ringClipPathId} path={PLASTER_RING_CLIP_PATH} />
         <SoftBlurFilter id={softGlowFilterId} stdDeviation={28} />
@@ -209,7 +209,7 @@ function NightStarsOverlay({
   stars,
 }: NightStarsOverlayProps) {
   return (
-    <ClockSvg>
+    <ClockSvg id="night-stars-overlay-svg">
       <defs>
         <RingClipPath id={ringClipPathId} path={PLASTER_RING_CLIP_PATH} />
         <clipPath id={clipPathId}>
