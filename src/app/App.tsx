@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Action } from "../components/actions/Action";
 import { Clock } from "../components/clock/Clock";
 import { SettingsMenu } from "../components/settings/SettingsMenu";
 import {
@@ -10,6 +11,7 @@ import {
 } from "../domain/timeZones";
 
 const SELECTED_CITY_STORAGE_KEY = "kcd-watches.selectedTimeZone";
+const REPOSITORY_URL = "https://github.com/carbongo/kcd-watches";
 
 export function App() {
   const [selectedTimeZone, setSelectedTimeZone] = useState(getInitialTimeZone);
@@ -25,11 +27,14 @@ export function App() {
   return (
     <>
       <Clock city={selectedCity} />
-      <SettingsMenu
-        cities={getTimeZoneCities()}
-        selectedTimeZone={selectedCity.timeZone}
-        onCityChange={handleCityChange}
-      />
+      <div className="fixed right-3 bottom-3 z-50 flex flex-col items-end gap-2 text-white ">
+        <SettingsMenu
+          cities={getTimeZoneCities()}
+          selectedTimeZone={selectedCity.timeZone}
+          onCityChange={handleCityChange}
+        />
+        <Action href={REPOSITORY_URL} label="GitHub" shortcutKey="g" />
+      </div>
     </>
   );
 }

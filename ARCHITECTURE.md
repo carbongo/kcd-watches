@@ -47,6 +47,16 @@ The visual clock is split into focused overlays:
 - `clockGeometry.ts`: Shared polar coordinate math, ring paths, arc paths, and rounded sun-event hour helpers.
 - `clockSvgDefs.tsx`: Shared `ClockSvg` wrapper plus reusable clip path and filter definitions.
 
+### `src/components/settings`
+
+Settings and action-menu UI is split into reusable, one-component files:
+
+- `SettingsMenu.tsx`: Composes the city picker and keyboard shortcut behavior.
+- `Action.tsx`: Positions an action group.
+- `ActionButton.tsx`: Renders a reusable action trigger.
+- `ActionShortcutKey.tsx`: Renders the visual keyboard key label used by action triggers.
+- `ActionMenu.tsx`: Renders the reusable floating action menu panel.
+
 ### Assets and Styles
 
 - `src/images/face.png` and `src/images/arrow.png` are imported with Parcel `data-url:` specifiers so they can be embedded into the final document.
@@ -64,4 +74,5 @@ Generated folders are ignored by git.
 - The face image and pointer image are separate static assets.
 - The animated clock layer rotates as one absolute-positioned group over the fixed face.
 - Visual overlays should share geometry helpers to keep the 1200 x 1200 coordinate system consistent.
+- Reusable settings/action UI components should live in separate component files, not inside `SettingsMenu.tsx` or bundled together in a multi-component file.
 - Domain calculations should stay testable without a browser renderer.

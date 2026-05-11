@@ -15,14 +15,15 @@ export function TimeReadout({ time, sunWindow }: TimeReadoutProps) {
 
   return (
     <figcaption className="absolute inset-0 z-40 m-auto grid h-1/2 w-1/2 place-items-center overflow-hidden text-center">
-      <div className="flex gap-1 text-[min(3.8vw,3.8vh)] leading-[min(4.5vw,4.5vh)] text-white">
-        <span>
-          {hours}:{minutes}:{seconds}
+      <div className="flex flex-col items-center gap-[min(2.5vw,2.5vh)] text-white font-serif">
+        <span className="text-[min(8vw,8vh)] leading-[min(10vw,10vh)]">
+          {hours}:{minutes}
         </span>
+        <hr className="border-stone-50 w-full" />
+        <p className="w-full text-[min(3.8vw,3.8vh)] leading-[min(5vw,5vh)] uppercase text-amber-100/80">
+          {sunLabel}
+        </p>
       </div>
-      <p className="absolute bottom-[16%] left-1/2 w-[72%] -translate-x-1/2 text-center text-[10px] uppercase text-amber-100/80">
-        {sunLabel}
-      </p>
     </figcaption>
   );
 }

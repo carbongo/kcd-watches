@@ -11,11 +11,11 @@ if (!root) {
 }
 
 document.documentElement.classList.add("min-h-full");
-document.body.classList.add("m-0", "min-h-full", "bg-black", "font-serif");
+document.body.classList.add("m-0", "min-h-full", "bg-black");
 root.classList.add("min-h-full");
 
 createRoot(root).render(
   <StrictMode>
     <App />
-  </StrictMode>
+  </StrictMode>,
 );
