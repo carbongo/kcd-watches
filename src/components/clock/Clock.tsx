@@ -5,7 +5,7 @@ import { getSunWindow } from "../../domain/sun";
 import { getTimeZoneCity } from "../../domain/timeZones";
 import { useNow } from "../../hooks/useNow";
 import { HourLabelsOverlay } from "./HourLabelsOverlay";
-import { PlasterArcOverlay } from "./PlasterArcOverlay";
+import { PlasterArcBorders, PlasterArcOverlay } from "./PlasterArcOverlay";
 import { SunArcOverlay } from "./SunArcOverlay";
 import { TimeReadout } from "./TimeReadout";
 
@@ -35,6 +35,7 @@ export function Clock() {
         >
           <PlasterArcOverlay />
           <SunArcOverlay sunWindow={sunWindow} />
+          <PlasterArcBorders />
           <HourLabelsOverlay sunWindow={sunWindow} />
         </div>
 

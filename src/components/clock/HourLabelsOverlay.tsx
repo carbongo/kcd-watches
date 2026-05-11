@@ -5,6 +5,7 @@ import {
   minutesToDegrees,
   polarToCartesian,
 } from "./clockGeometry";
+import { getRoundedSunEventHours } from "./SunArcOverlay";
 
 const HOURS = Array.from({ length: 24 }, (_, hour) => hour);
 const overlayClassName = "pointer-events-none absolute inset-0 h-full w-full";
@@ -12,12 +13,21 @@ const textClassName =
   "font-serif text-[36px] font-bold [paint-order:stroke]";
 const dayTextClassName = `${textClassName} fill-black/80`;
 const nightTextClassName = `${textClassName} fill-white`;
+const sunEventTextClassName = `${textClassName} fill-amber-200`;
 
 interface HourLabelsOverlayProps {
   sunWindow: SunWindow;
 }
 
 export function HourLabelsOverlay({ sunWindow }: HourLabelsOverlayProps) {
+  const sunEventHours =
+    sunWindow.status === "normal"
+      ? getRoundedSunEventHours(
+          sunWindow.sunriseMinutes,
+          sunWindow.sunsetMinutes,
+        )
+      : [];
+
   return (
     <svg
       className={overlayClassName}
@@ -31,11 +41,7 @@ export function HourLabelsOverlay({ sunWindow }: HourLabelsOverlayProps) {
         return (
           <text
             key={hour}
-            className={
-              isNightHour(sunWindow, hour)
-                ? nightTextClassName
-                : dayTextClassName
-            }
+            className={getHourTextClassName(sunWindow, sunEventHours, hour)}
             x={position.x}
             y={position.y}
             textAnchor="middle"
@@ -48,6 +54,18 @@ export function HourLabelsOverlay({ sunWindow }: HourLabelsOverlayProps) {
       })}
     </svg>
   );
+}
+
+function getHourTextClassName(
+  sunWindow: SunWindow,
+  sunEventHours: number[],
+  hour: number,
+) {
+  if (sunEventHours.includes(hour)) {
+    return sunEventTextClassName;
+  }
+
+  return isNightHour(sunWindow, hour) ? nightTextClassName : dayTextClassName;
 }
 
 function isNightHour(sunWindow: SunWindow, hour: number) {

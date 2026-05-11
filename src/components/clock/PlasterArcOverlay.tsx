@@ -75,13 +75,6 @@ export function PlasterArcOverlay() {
           <stop offset="1" stopColor="#4a4f60" stopOpacity="0.12" />
         </linearGradient>
 
-        <linearGradient id="gold-border" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fff0a7" />
-          <stop offset="0.28" stopColor="#d4a52d" />
-          <stop offset="0.58" stopColor="#f7d85a" />
-          <stop offset="1" stopColor="#8f6416" />
-        </linearGradient>
-
         <clipPath id="plaster-ring-clip">
           <path d={RING_PATH} fillRule="evenodd" clipRule="evenodd" />
         </clipPath>
@@ -118,6 +111,25 @@ export function PlasterArcOverlay() {
           ))}
         </g>
       </g>
+    </svg>
+  );
+}
+
+export function PlasterArcBorders() {
+  return (
+    <svg
+      className={overlayClassName}
+      viewBox={CLOCK_VIEW_BOX}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="gold-border" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fff0a7" />
+          <stop offset="0.28" stopColor="#d4a52d" />
+          <stop offset="0.58" stopColor="#f7d85a" />
+          <stop offset="1" stopColor="#8f6416" />
+        </linearGradient>
+      </defs>
 
       <g fill="none">
         <circle

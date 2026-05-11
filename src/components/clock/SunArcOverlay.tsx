@@ -19,11 +19,14 @@ const nightClassName =
 const glowClassName =
   "fill-none stroke-amber-300/50 stroke-[150] [stroke-linecap:round]";
 const coreClassName =
-  "fill-none stroke-amber-100/100 stroke-[24] [stroke-linecap:round]";
+  "fill-none stroke-amber-100/100 stroke-[42] [stroke-linecap:round]";
+const markerClassName = "pointer-events-none absolute inset-0 h-full w-full";
+const markerCircleClassName = "fill-none stroke-amber-200/95 stroke-[4]";
 
 const MIN_CORE_ARC_MINUTES = 60;
 const MAX_CORE_ARC_MINUTES = 240;
 const CORE_DAYLIGHT_RATIO = 0.4;
+const SUN_EVENT_MARKER_RADIUS = 36;
 
 export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
   if (sunWindow.status === "normal") {
@@ -35,13 +38,24 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
       sunWindow.sunsetMinutes,
       sunWindow.sunriseMinutes,
     );
+    const markerHours = getRoundedSunEventHours(
+      sunWindow.sunriseMinutes,
+      sunWindow.sunsetMinutes,
+    );
 
     return (
-      <svg className={arcClassName} viewBox={CLOCK_VIEW_BOX} aria-hidden="true">
-        <path className={nightClassName} d={nightPath} />
-        <path className={glowClassName} d={corePath} />
-        <path className={coreClassName} d={corePath} />
-      </svg>
+      <>
+        <svg
+          className={arcClassName}
+          viewBox={CLOCK_VIEW_BOX}
+          aria-hidden="true"
+        >
+          <path className={nightClassName} d={nightPath} />
+          <path className={glowClassName} d={corePath} />
+          <path className={coreClassName} d={corePath} />
+        </svg>
+        <SunEventHourMarkers hours={markerHours} />
+      </>
     );
   }
 
@@ -66,6 +80,47 @@ export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
       <path className={coreClassName} d={corePath} />
     </svg>
   );
+}
+
+interface SunEventHourMarkersProps {
+  hours: number[];
+}
+
+function SunEventHourMarkers({ hours }: SunEventHourMarkersProps) {
+  return (
+    <svg
+      className={markerClassName}
+      viewBox={CLOCK_VIEW_BOX}
+      aria-hidden="true"
+    >
+      {hours.map((hour) => {
+        const position = polarToCartesian(minutesToDegrees(hour * 60));
+
+        return (
+          <circle
+            key={hour}
+            className={markerCircleClassName}
+            cx={position.x}
+            cy={position.y}
+            r={SUN_EVENT_MARKER_RADIUS}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+export function getRoundedSunEventHours(
+  sunriseMinutes: number,
+  sunsetMinutes: number,
+) {
+  return Array.from(
+    new Set([getRoundedHour(sunriseMinutes), getRoundedHour(sunsetMinutes)]),
+  );
+}
+
+function getRoundedHour(minutes: number) {
+  return normalizeMinutes(Math.round(minutes / 60) * 60) / 60;
 }
 
 function getZenithArcPath(startMinutes: number, endMinutes: number) {
