@@ -1,0 +1,65 @@
+import type { SunWindow } from "../../domain/sun";
+import { normalizeMinutes } from "../../domain/time";
+
+interface SunArcOverlayProps {
+  sunWindow: SunWindow;
+}
+
+const CENTER = 600;
+const RADIUS = 446;
+const arcClassName =
+  "pointer-events-none absolute inset-0 h-full w-full mix-blend-screen";
+const glowClassName =
+  "fill-none stroke-amber-300/25 stroke-[113] [stroke-linecap:round]";
+// TODO: Change the logic behind core lightning and core lighting to be based on the sun's zenith (high noon)
+const coreClassName =
+  "fill-none stroke-amber-400/70 stroke-[64] [stroke-linecap:round]";
+
+export function SunArcOverlay({ sunWindow }: SunArcOverlayProps) {
+  if (sunWindow.status === "normal") {
+    const path = getArcPath(sunWindow.sunriseMinutes, sunWindow.sunsetMinutes);
+
+    return (
+      <svg className={arcClassName} viewBox="0 0 1200 1200" aria-hidden="true">
+        <path className={glowClassName} d={path} />
+        <path className={coreClassName} d={path} />
+      </svg>
+    );
+  }
+
+  if (sunWindow.status === "polar-night") {
+    return null;
+  }
+
+  return (
+    <svg className={arcClassName} viewBox="0 0 1200 1200" aria-hidden="true">
+      <circle className={glowClassName} cx={CENTER} cy={CENTER} r={RADIUS} />
+      <circle className={coreClassName} cx={CENTER} cy={CENTER} r={RADIUS} />
+    </svg>
+  );
+}
+
+function getArcPath(startMinutes: number, endMinutes: number) {
+  const start = polarToCartesian(minutesToDegrees(startMinutes));
+  const end = polarToCartesian(minutesToDegrees(endMinutes));
+  const daylightMinutes = normalizeMinutes(endMinutes - startMinutes);
+  const largeArcFlag = daylightMinutes > 720 ? 1 : 0;
+
+  return [
+    `M ${start.x.toFixed(3)} ${start.y.toFixed(3)}`,
+    `A ${RADIUS} ${RADIUS} 0 ${largeArcFlag} 1 ${end.x.toFixed(3)} ${end.y.toFixed(3)}`,
+  ].join(" ");
+}
+
+function minutesToDegrees(minutes: number) {
+  return (normalizeMinutes(minutes + 720) / 1440) * 360;
+}
+
+function polarToCartesian(angleDegrees: number) {
+  const angleRadians = ((angleDegrees - 90) * Math.PI) / 180;
+
+  return {
+    x: CENTER + RADIUS * Math.cos(angleRadians),
+    y: CENTER + RADIUS * Math.sin(angleRadians),
+  };
+}
