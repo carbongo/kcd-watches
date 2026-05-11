@@ -6,6 +6,7 @@ import { getTimeZoneCity } from "../../domain/timeZones";
 import { useNow } from "../../hooks/useNow";
 import { CelestialMarkersOverlay } from "./CelestialMarkersOverlay";
 import { HourLabelsOverlay } from "./HourLabelsOverlay";
+import { NightOverlay } from "./NightOverlay";
 import { PlasterArcBorders, PlasterArcOverlay } from "./PlasterArcOverlay";
 import { SunArcOverlay } from "./SunArcOverlay";
 import { TimeReadout } from "./TimeReadout";
@@ -35,6 +36,7 @@ export function Clock() {
           style={{ transform: `rotate(${clockRotation}deg)` }}
         >
           <PlasterArcOverlay />
+          <NightOverlay sunWindow={sunWindow} />
           <SunArcOverlay sunWindow={sunWindow} />
           <CelestialMarkersOverlay />
           <PlasterArcBorders />

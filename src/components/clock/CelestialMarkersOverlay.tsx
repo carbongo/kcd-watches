@@ -1,18 +1,15 @@
 import {
-  CLOCK_CENTER,
   CLOCK_VIEW_BOX,
+  PLASTER_RING_CLIP_PATH,
   SUN_ARC_RADIUS,
   minutesToDegrees,
   polarToCartesian,
 } from "./clockGeometry";
+import { GlowFilter, RingClipPath } from "./clockSvgDefs";
 
 const overlayClassName = "pointer-events-none absolute inset-0 h-full w-full";
 const MOON_HOUR = 0;
 const SUN_HOUR = 12;
-const RING_WIDTH = 132;
-const INNER_RING_RADIUS = SUN_ARC_RADIUS - RING_WIDTH / 2;
-const OUTER_RING_RADIUS = SUN_ARC_RADIUS + RING_WIDTH / 2;
-const RING_CLIP_PATH = getRingClipPath();
 
 const moonPosition = polarToCartesian(minutesToDegrees(MOON_HOUR * 60));
 const sunPosition = polarToCartesian(minutesToDegrees(SUN_HOUR * 60));
@@ -36,22 +33,8 @@ export function CelestialMarkersOverlay() {
           <stop offset="0.75" stopColor="#cccccc" />
           <stop offset="1" stopColor="#ffffff" />
         </radialGradient>
-        <clipPath id="celestial-arc-clip">
-          <path d={RING_CLIP_PATH} fillRule="evenodd" clipRule="evenodd" />
-        </clipPath>
-        <filter
-          id="celestial-sun-glow"
-          x="-80%"
-          y="-80%"
-          width="260%"
-          height="260%"
-        >
-          <feGaussianBlur stdDeviation="8" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
+        <RingClipPath id="celestial-arc-clip" path={PLASTER_RING_CLIP_PATH} />
+        <GlowFilter id="celestial-sun-glow" stdDeviation={8} />
       </defs>
 
       <g clipPath="url(#celestial-arc-clip)">
@@ -113,17 +96,6 @@ export function CelestialMarkersOverlay() {
       </g>
     </svg>
   );
-}
-
-function getRingClipPath() {
-  return [
-    `M ${CLOCK_CENTER} ${CLOCK_CENTER - OUTER_RING_RADIUS}`,
-    `A ${OUTER_RING_RADIUS} ${OUTER_RING_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER + OUTER_RING_RADIUS}`,
-    `A ${OUTER_RING_RADIUS} ${OUTER_RING_RADIUS} 0 1 1 ${CLOCK_CENTER} ${CLOCK_CENTER - OUTER_RING_RADIUS}`,
-    `M ${CLOCK_CENTER} ${CLOCK_CENTER - INNER_RING_RADIUS}`,
-    `A ${INNER_RING_RADIUS} ${INNER_RING_RADIUS} 0 1 0 ${CLOCK_CENTER} ${CLOCK_CENTER + INNER_RING_RADIUS}`,
-    `A ${INNER_RING_RADIUS} ${INNER_RING_RADIUS} 0 1 0 ${CLOCK_CENTER} ${CLOCK_CENTER - INNER_RING_RADIUS}`,
-  ].join(" ");
 }
 
 function getPaintedSunRays(
